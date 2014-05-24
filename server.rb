@@ -1,38 +1,22 @@
 require 'sinatra'
 require 'rubygems'
+require 'csv'
 
 
-@@leaderboard = [
-  {
-    home_team: "Patriots",
-    away_team: "Broncos",
-    home_score: 7,
-    away_score: 3
-  },
-  {
-    home_team: "Broncos",
-    away_team: "Colts",
-    home_score: 3,
-    away_score: 0
-  },
-  {
-    home_team: "Patriots",
-    away_team: "Colts",
-    home_score: 11,
-    away_score: 7
-  },
-  {
-    home_team: "Steelers",
-    away_team: "Patriots",
-    home_score: 7,
-    away_score: 21
-  }
-]
+#METHODS--------------------------------------------------------------
+def load_csv(file_name)
+  scores = []
+  CSV.foreach(file_name, headers: true, header_converters: :symbol) do |score|
+    scores << score.to_hash
+  end
+  scores
+end
+
 
 #ROUTES AND VIEWS------------------------------------------------------
 get '/leaderboard' do
   @title = "Leaderboard"
-  @leaderboard_array = @@leaderboard
+  @leaderboard_array = load_csv("scores.csv")
   erb :index
 end
 
@@ -41,6 +25,7 @@ get '/' do
 end
 
 get '/teams' do
-
+  @title = "Teams Page"
+  @leaderboard_array = load_csv("scores.csv")
   erb :show
 end
