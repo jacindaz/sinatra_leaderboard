@@ -13,8 +13,20 @@ def load_csv(file_name)
   scores
 end
 
-def return_keys(hash)
-  return hash.keys
+def winning_team(hash)
+  if hash[:home_score].to_i > hash[:away_score].to_i
+    return hash[:home_team]
+  elsif hash[:away_score].to_i > hash[:home_score].to_i
+    return hash[:away_team]
+  end
+end
+
+def losing_team(hash)
+  if hash[:home_score].to_i < hash[:away_score].to_i
+    return hash[:home_team]
+  elsif hash[:away_score].to_i < hash[:home_score].to_i
+    return hash[:away_team]
+  end
 end
 
 def teams(array_of_hashes)
@@ -28,40 +40,27 @@ def teams(array_of_hashes)
       teams << away_team
     end
   end
-  #puts "#{teams}"
   return teams
 end
 
-#returns which team won based on the score
-def won_or_lost(hash)
-  if hash[:home_score] > hash[:away_score]
-    return hash[:home_team]
-  elsif hash[:away_score] > hash[:home_score]
-    return hash[:away_team]
-  end
-end
 
-#returns an array of hashes with team, wins, losses
-def teams_wins_losses(array_of_teams)
-  array = []
-  array_of_teams.each do |team|
-    team_hash = {team_name: "#{team}", won: 0, lost: 0}
-    array << team_hash
+def add_wonlost_data(array_of_teams, array_of_games)
+  array_of_games.each do |game|
+    winning_team = winning_team(game)
+    losing_team = losing_team(game)
+    index = array_of_teams.length
+    array_index = index - 1
+    index.times do
+      case array_of_teams[array_index][:team_name]
+      when winning_team
+        array_of_teams[array_index][:won] += 1
+      when losing_team
+        array_of_teams[array_index][:lost] += 1
+      end
+      array_index -= 1
+    end #end times loop
   end
-  #puts "#{array}"
-  return array
-end
-
-def add_wonlost_data(array_of_hashes)
-  team_wins_losses = []
-  array_of_hashes.each do |game|
-    win_or_lost = {team_name: "", won: 0, lost: 0}
-    winning_team = won_or_lost(game)
-    win_or_lost[:team_name] = winning_team
-    win_or_lost[:won] += 1
-    team_wins_losses << win_or_lost
-  end
-  team_wins_losses
+  array_of_teams
 end
 
 #ROUTES AND VIEWS------------------------------------------------------
@@ -69,7 +68,9 @@ get '/leaderboard' do
   @title = "Leaderboard"
   @leaderboard_array = load_csv("scores.csv")
   @teams = teams(@leaderboard_array)
-  @team_win_loss = teams_wins_losses(@teams)
+  @teams_wins_losses = teams_wins_losses(@teams)
+
+  @teams_updated = add_wonlost_data(@teams_wins_losses, @leaderboard_array)
 
 
   erb :index

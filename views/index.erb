@@ -12,13 +12,13 @@
     <h1><%= @title %></h1>
 
       <table class="table table-hover">
-        <% @team_win_loss[0].each do |key,value| %>
+        <% @teams_wins_losses[0].each do |key,value| %>
         <th>
-          <%= key.to_s %>
+          <%= key.to_s.capitalize %>
         </th>
         <% end %>
 
-        <% @team_win_loss.each do |nested_hash| %>
+        <% @teams_wins_losses.each do |nested_hash| %>
           <tr>
             <% nested_hash.each do |key, value| %>
               <td><%= value %></td>
@@ -28,7 +28,7 @@
       </table>
 
 
-     <%= @leaderboard_array %>
+     <%= @team_updated %>
 
 
   </body>
