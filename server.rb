@@ -41,10 +41,20 @@ def won_or_lost(hash)
   end
 end
 
+#returns an array of hashes with team, wins, losses
+def teams_wins_losses(array_of_teams)
+  array = []
+  array_of_teams.each do |team|
+    team_hash = {team_name: "#{team}", won: 0, lost: 0}
+    array << team_hash
+  end
+  #puts "#{array}"
+  return array
+end
+
 def add_wonlost_data(array_of_hashes)
   team_wins_losses = []
   array_of_hashes.each do |game|
-    if
     win_or_lost = {team_name: "", won: 0, lost: 0}
     winning_team = won_or_lost(game)
     win_or_lost[:team_name] = winning_team
@@ -58,7 +68,8 @@ end
 get '/leaderboard' do
   @title = "Leaderboard"
   @leaderboard_array = load_csv("scores.csv")
-  @keys = return_keys(@leaderboard_array[0])
+  @teams = teams(@leaderboard_array)
+  @team_win_loss = teams_wins_losses(@teams)
 
 
   erb :index
