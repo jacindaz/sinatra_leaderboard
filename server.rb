@@ -43,6 +43,14 @@ def teams(array_of_hashes)
   return teams
 end
 
+def teams_wins_losses(array_of_teams)
+  array = []
+  array_of_teams.each do |team|
+    team_hash = {team_name: "#{team}", won: 0, lost: 0}
+    array << team_hash
+  end
+  return array
+end
 
 def add_wonlost_data(array_of_teams, array_of_games)
   array_of_games.each do |game|
