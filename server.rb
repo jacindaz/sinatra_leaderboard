@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'rubygems'
 require 'csv'
+require 'pry'
 
 
 #METHODS--------------------------------------------------------------
@@ -12,11 +13,18 @@ def load_csv(file_name)
   scores
 end
 
+def return_keys(hash)
+  return hash.keys
+end
+
 
 #ROUTES AND VIEWS------------------------------------------------------
 get '/leaderboard' do
   @title = "Leaderboard"
   @leaderboard_array = load_csv("scores.csv")
+  @keys = return_keys(@leaderboard_array[0])
+
+
   erb :index
 end
 
