@@ -25,16 +25,24 @@
       </th>
       <% end %>
 
-
+<!--Game information-->
       <% @leaderboard_array.each do |game| %>
         <tr>
           <% if (game[:home_team] == @team_name) || (game[:away_team] == @team_name) %>
             <% game.each do |key, value| %>
-              <td><%= value %></td>
-            <% end %>
-          <% end %>
+              <% if (key == :home_team) || (key == :away_team) %>
+                <td>
+                  <a href="/teams/<%= value %>">
+                    <%= value %>
+                  </a>
+                </td>
+              <% else %>
+                <td><%= value %></td>
+              <% end %> <!--end the if/else statement-->
+            <% end %> <!--end the game.each loop-->
+          <% end %> <!--end the if home/away team is the current team's page-->
         </tr>
-      <% end %>
+      <% end %> <!--end @leaderboard_array.each loop-->
 
 
     </table>
