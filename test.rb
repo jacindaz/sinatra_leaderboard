@@ -27,6 +27,30 @@ games = [
   }
 ]
 
+
+def create_hash_keys(array_of_keys)
+  new_hash = {}
+  array_of_keys.each do |key|
+    new_hash[key] = nil
+  end
+  return new_hash
+end
+#create_new_hash([:team, :wins, :losses])
+
+def teams_wins_losses(array_of_teams, keys_array)
+  array = []
+  array_of_teams.each do |team|
+    team_hash = create_hash_keys(keys_array)
+    team = team.capitalize
+    team_hash[:team] = team
+    array << team_hash
+  end
+  puts "Array: #{array}"
+  return array
+end
+teams_wins_losses(["Patriots", "Colts"], [:team, :wins, :losses])
+
+
 def winning_team(hash)
   if hash[:home_score].to_i > hash[:away_score].to_i
     return hash[:home_team]
@@ -58,17 +82,6 @@ def teams(array_of_hashes)
   return teams
 end
 
-def teams_wins_losses(array_of_teams)
-  array = []
-  array_of_teams.each do |team|
-    team_hash = {team_name: "#{team}", won: 0, lost: 0}
-    array << team_hash
-  end
-  #puts "#{array}"
-  return array
-end
-teams = teams_wins_losses(teams(games))
-
 
 
 def add_wonlost_data(array_of_teams, array_of_games)
@@ -92,4 +105,4 @@ def add_wonlost_data(array_of_teams, array_of_games)
   puts "#{array_of_teams}"
   array_of_teams
 end
-add_wonlost_data(teams, games)
+#add_wonlost_data(teams, games)

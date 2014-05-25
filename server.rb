@@ -43,15 +43,27 @@ def teams(array_of_hashes)
   return teams
 end
 
-def teams_wins_losses(array_of_teams)
+def create_hash_keys(array_of_keys)
+  new_hash = {}
+  array_of_keys.each do |key|
+    new_hash[key] = nil
+  end
+  return new_hash
+end
+#create_new_hash([:team, :wins, :losses])
+
+def teams_wins_losses(array_of_teams, keys_array)
   array = []
   array_of_teams.each do |team|
+    team_hash = create_hash_keys(keys_array)
     team = team.capitalize
-    team_hash = {team: "#{team}", wins: 0, losses: 0}
+    team_hash[:team] = team
     array << team_hash
   end
+  puts "Array: #{array}"
   return array
 end
+teams_wins_losses(["Patriots", "Colts"], [:team, :wins, :losses])
 
 def add_wonlost_data(array_of_teams, array_of_games)
   array_of_games.each do |game|
