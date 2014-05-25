@@ -21,7 +21,17 @@
         <% @teams_wins_losses.each do |nested_hash| %>
           <tr>
             <% nested_hash.each do |key, value| %>
-              <td><%= value %></td>
+              <% if key == :team %>
+                <td>
+                  <a href="/teams/<%= value %>">
+                    <%= value %>
+                  </a>
+                </td>
+              <% else %>
+                <td>
+                  <%= value %>
+                </td>
+              <% end %>
             <% end %>
           </tr>
         <% end %>

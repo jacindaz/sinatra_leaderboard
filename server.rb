@@ -46,6 +46,7 @@ end
 def teams_wins_losses(array_of_teams)
   array = []
   array_of_teams.each do |team|
+    team = team.capitalize
     team_hash = {team: "#{team}", wins: 0, losses: 0}
     array << team_hash
   end
@@ -72,6 +73,17 @@ def add_wonlost_data(array_of_teams, array_of_games)
   array_of_teams
 end
 
+#return a specific team's hash
+def one_team(array_of_teams, team_name)
+  array_of_teams.each do |team|
+    if team[:team] == team_name
+      return team
+    end
+  end
+end
+
+
+
 #ROUTES AND VIEWS------------------------------------------------------
 get '/leaderboard' do
   @title = "Leaderboard"
@@ -81,7 +93,6 @@ get '/leaderboard' do
 
   @teams_updated = add_wonlost_data(@teams_wins_losses, @leaderboard_array)
 
-
   erb :index
 end
 
@@ -89,8 +100,15 @@ get '/' do
   redirect '/leaderboard'
 end
 
-get '/teams' do
+get '/teams/:team_name' do
   @title = "Teams Page"
+  @team_name = params[:team_name]
   @leaderboard_array = load_csv("scores.csv")
+  @teams = teams(@leaderboard_array)
+  @teams_wins_losses = teams_wins_losses(@teams)
+  @teams = add_wonlost_data(@teams_wins_losses, @leaderboard_array)
+
+  @team_hash = one_team(@teams, @team_name)
+
   erb :show
 end

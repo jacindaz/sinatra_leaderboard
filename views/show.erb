@@ -9,7 +9,42 @@
 
   <body>
 
-    <%= @leaderboard_array %>
+    <h1><%= @team_name %> Team Page</h1>
+
+    <h3>Wins: <%= @team_hash[:wins] %><br>
+      Losses: <%=  @team_hash[:losses] %>
+    </h3>
+
+    <h3>Games</h3>
+
+    <table class="table table-hover">
+
+<!--Table Header-->
+      <% @leaderboard_array[0].each do |key,value| %>
+      <th>
+        <%= key.capitalize %>
+      </th>
+      <% end %>
+
+
+      <% @leaderboard_array.each do |game| %>
+        <tr>
+          <% game.each do |key, value| %>
+            <td><%= value %></td>
+          <% end %>
+        </tr>
+      <% end %>
+
+
+    </table>
+
+
+
+
+<br><br>
+    <p><a href="..">
+      Back to Leaderboard
+    </a></p>
 
   </body>
 
