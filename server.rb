@@ -46,7 +46,7 @@ end
 def teams_wins_losses(array_of_teams)
   array = []
   array_of_teams.each do |team|
-    team_hash = {team_name: "#{team}", won: 0, lost: 0}
+    team_hash = {team: "#{team}", wins: 0, losses: 0}
     array << team_hash
   end
   return array
@@ -59,15 +59,16 @@ def add_wonlost_data(array_of_teams, array_of_games)
     index = array_of_teams.length
     array_index = index - 1
     index.times do
-      case array_of_teams[array_index][:team_name]
+      case array_of_teams[array_index][:team]
       when winning_team
-        array_of_teams[array_index][:won] += 1
+        array_of_teams[array_index][:wins] += 1
       when losing_team
-        array_of_teams[array_index][:lost] += 1
+        array_of_teams[array_index][:losses] += 1
       end
       array_index -= 1
     end #end times loop
   end
+  array_of_teams = array_of_teams.sort_by { |team| team[:losses].to_i}
   array_of_teams
 end
 
