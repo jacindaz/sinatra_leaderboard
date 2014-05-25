@@ -43,27 +43,26 @@ def teams(array_of_hashes)
   return teams
 end
 
-def create_hash_keys(array_of_keys)
+def create_hash_keys(array_of_keys, value)
   new_hash = {}
   array_of_keys.each do |key|
-    new_hash[key] = nil
+    new_hash[key] = value
   end
   return new_hash
 end
 #create_new_hash([:team, :wins, :losses])
 
-def teams_wins_losses(array_of_teams, keys_array)
+def add_teams(array_of_teams, keys_array, key_to_update, default_key_value)
   array = []
   array_of_teams.each do |team|
-    team_hash = create_hash_keys(keys_array)
+    team_hash = create_hash_keys(keys_array, default_key_value)
     team = team.capitalize
-    team_hash[:team] = team
+    team_hash[key_to_update] = team
     array << team_hash
   end
-  puts "Array: #{array}"
   return array
 end
-teams_wins_losses(["Patriots", "Colts"], [:team, :wins, :losses])
+#teams_wins_losses(["Patriots", "Colts"], [:team, :wins, :losses], 0)
 
 def add_wonlost_data(array_of_teams, array_of_games)
   array_of_games.each do |game|
@@ -100,10 +99,10 @@ end
 get '/leaderboard' do
   @title = "Leaderboard"
   @leaderboard_array = load_csv("scores.csv")
-  @teams = teams(@leaderboard_array)
-  @teams_wins_losses = teams_wins_losses(@teams)
+  @teams_array = teams(@leaderboard_array)
+  @teams_wins_losses = add_teams(@teams_array, [:team, :wins, :losses], :team, 0)
 
-  @teams_updated = add_wonlost_data(@teams_wins_losses, @leaderboard_array)
+  @teams_update_wins_losses = add_wonlost_data(@teams_wins_losses, @leaderboard_array)
 
   erb :index
 end
@@ -116,8 +115,8 @@ get '/teams/:team_name' do
   @title = "Teams Page"
   @team_name = params[:team_name]
   @leaderboard_array = load_csv("scores.csv")
-  @teams = teams(@leaderboard_array)
-  @teams_wins_losses = teams_wins_losses(@teams)
+  @teams_array = teams(@leaderboard_array)
+  @teams_wins_losses = add_teams(@teams_array, [:team, :wins, :losses], :team, 0)
   @teams = add_wonlost_data(@teams_wins_losses, @leaderboard_array)
 
   @team_hash = one_team(@teams, @team_name)
