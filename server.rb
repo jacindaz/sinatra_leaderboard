@@ -83,11 +83,12 @@ def add_wonlost_data(array_of_teams, array_of_games)
   array_of_teams
 end
 
-#return a specific team's hash
-def one_team(array_of_teams, team_name, team_key)
-  array_of_teams.each do |team|
-    if team[team_key] == team_name
-      return team
+#return a specific hash, given the target key and target value
+#(such as a team's hash, w/ wins and losses info)
+def extract_hash(array_of_hashes, target_key, target_value)
+  array_of_hashes.each do |hash|
+    if hash[target_key] == target_value
+      return hash
     end
   end
 end
@@ -120,7 +121,7 @@ get '/teams/:team_name' do
   @teams_wins_losses = add_teams(@teams_array, [:team, :wins, :losses], :team, 0)
   @teams = add_wonlost_data(@teams_wins_losses, @leaderboard_array)
 
-  @team_hash = one_team(@teams, @team_name, :team)
+  @team_hash = extract_hash(@teams, :team, @team_name)
 
   erb :show
 end
