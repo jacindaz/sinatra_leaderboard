@@ -13,19 +13,19 @@ def load_csv(file_name)
   scores
 end
 
-def winning_team(hash)
-  if hash[:home_score].to_i > hash[:away_score].to_i
-    return hash[:home_team]
-  elsif hash[:away_score].to_i > hash[:home_score].to_i
-    return hash[:away_team]
+def winning_team(hash, team1, team2, team1_score, team2_score)
+  if hash[team1_score].to_i > hash[team2_score].to_i
+    return hash[team1]
+  elsif hash[team2_score].to_i > hash[team1_score].to_i
+    return hash[team2]
   end
 end
 
-def losing_team(hash)
-  if hash[:home_score].to_i < hash[:away_score].to_i
-    return hash[:home_team]
-  elsif hash[:away_score].to_i < hash[:home_score].to_i
-    return hash[:away_team]
+def losing_team(hash, team1, team2, team1_score, team2_score)
+  if hash[team1_score].to_i < hash[team2_score].to_i
+    return hash[team1]
+  elsif hash[team2_score].to_i < hash[team1_score].to_i
+    return hash[team2]
   end
 end
 
@@ -55,8 +55,8 @@ end
 
 def add_wonlost_data(array_of_teams, array_of_games)
   array_of_games.each do |game|
-    winning_team = winning_team(game)
-    losing_team = losing_team(game)
+    winning_team = winning_team(game, :home_team, :away_team, :home_score, :away_score)
+    losing_team = losing_team(game, :home_team, :away_team, :home_score, :away_score)
     index = array_of_teams.length
     array_index = index - 1
     index.times do
